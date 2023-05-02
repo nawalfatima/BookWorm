@@ -11,25 +11,30 @@
         </div>
     </div>
     <div class=" card-body p-4">
-        <form method="post">
-            <div class="border p-3 ">
-                <div asp-validation-summary="All"></div>
-                <div class="mb-3">
-                    <label asp-for="Name"></label>
-                    <input asp-for="Name" class="form-control" />
+        <form method="post" class="row">
+            <div class="border p-3">
+@*                <div asp-validation-summary="All"></div>
+*@                <div class="form-floating py-2 col-12">
+                    <label asp-for="Name" class="ms-2"></label>
+                    <input asp-for="Name" class="form-control border-0 shadow" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
-                <div class="mb-3">
-                    <label asp-for="DisplayOrder"></label>
-                    <input asp-for="DisplayOrder" class="form-control" />
+                <div class="form-floating py-2 col-12">
+                    <label asp-for="DisplayOrder" class="ms-2"></label>
+                    <input asp-for="DisplayOrder" class="form-control border-0 shadow"  />
                     <span asp-validation-for="DisplayOrder" class="text-danger"></span>
 
                 </div>
-                <button type="submit" class="btn btn-primary" style="width:158px">Create</button>
-                <a asp-controller="Category" asp-action="Index" class="btn btn-secondary" style="width:158px">
+                <div class="row pt-2">
+                    <div class="col-6 col-md-3">
+                        <button type="submit" class="btn btn-primary form-control">Create</button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                <a asp-controller="Category" asp-action="Index" class="btn btn-outline-primary border form-control">
                     Back To List
                 </a>
-
+                    </div>
+                </div>
             </div>
 
         </form>
