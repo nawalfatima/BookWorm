@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BookWormWeb.Models
+namespace Book.Models
 {
     public class Product
     {

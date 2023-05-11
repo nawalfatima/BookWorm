@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
-namespace BookWormWeb.Models
+namespace Book.Models
 {
     public class CoverType
     {
