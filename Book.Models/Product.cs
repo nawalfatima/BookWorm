@@ -36,20 +36,20 @@ namespace Book.Models
         [Display(Name = "Price for 100+")]
 
         public double Price100 { get; set; }
-        [ValidateNever]
-        public string ImageUrl { get; set; }
-        [Required]
-        [Display(Name = "Category")]
+        //[ValidateNever]
+        //public string ImageUrl { get; set; }
+        //[Required]
+        //[Display(Name = "Category")]
 
-        public int CategoryId { get; set; }
-        [ForeignKey("CategoryId")]
-        [ValidateNever]
-        public Category Category { get; set; }
-        [Required]
-        [Display(Name = "Cover Type")]
-        public int CoverTypeId { get; set; }
-        [ForeignKey("CoverTypeId")]
-        [ValidateNever]
-        public CoverType CoverType { get; set; }
+        //public int CategoryId { get; set; }
+        //[ForeignKey("CategoryId")]
+        //[ValidateNever]
+        //public Category Category { get; set; }
+        //[Required]
+        //[Display(Name = "Cover Type")]
+        //public int CoverTypeId { get; set; }
+        //[ForeignKey("CoverTypeId")]
+        //[ValidateNever]
+        //public CoverType CoverType { get; set; }
     }
 }
