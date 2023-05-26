@@ -1,5 +1,6 @@
 ﻿using Book.DataAccess.Repository.IRepository;
 using Book.Models;
+using Book.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -16,61 +17,62 @@ namespace BookWormWeb.Areas.Admin.Controllers
         public IActionResult Index()
         {
             List<Product> objProductList = _unitOfWork.ProductRepo.GetAll().ToList();
-            IEnumerable<SelectListItem> CategoryList= _unitOfWork.CategoryRepo.GetAll()
-                .Select(u=> new SelectListItem
-                {
-                    Text= u.Name,
-                    Value = u.Id.ToString()
-                }
-            );
+            
+            
             return View(objProductList);
         }
         //GET
-        public IActionResult Create()
+        public IActionResult Upsert(int? id)
         {
-            return View();
+            ProductVM productVM = new()
+            {
+                CategoryList = _unitOfWork.CategoryRepo.GetAll()
+                .Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                Product = new Product()
+            };
+            if(id == null || id == 0)
+            {   //create
+                return View(productVM);
+
+            }
+            else
+            {
+                //update
+                productVM.Product = _unitOfWork.ProductRepo.Get(u => u.Id == id);
+                return View(productVM);
+
+            }
         }
         //POST
         [HttpPost]
-        public IActionResult Create(Product obj)
+        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.ProductRepo.Add(obj);
+                _unitOfWork.ProductRepo.Add(productVM.Product);
                 _unitOfWork.Save();
                 TempData["success"] = "Product created successfully";
                 return RedirectToAction("Index");
             }
-            return View();
-        }
-        //GET
-        public IActionResult Edit(int id)
-        {
-            if (id == null || id == 0)
+            else
             {
-                return NotFound();
-            }
-            Product productFromDb = _unitOfWork.ProductRepo.Get(i => i.Id == id);
-            if (productFromDb == null)
-            {
-                return NotFound();
-            }
+                productVM.CategoryList = _unitOfWork.CategoryRepo.GetAll()
+                .Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                });
 
-            return View(productFromDb);
-        }
-        //POST
-        [HttpPost]
-        public IActionResult Edit(Product obj)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.ProductRepo.Update(obj);
-                _unitOfWork.Save();
-                TempData["success"] = "Product updated successfully";
-                return RedirectToAction("Index");
+
+            return View(productVM);
             }
-            return View();
         }
+        
+        
         //GET
         public IActionResult Delete(int id)
         {
