@@ -3,6 +3,7 @@ using Book.Models;
 using Book.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BookWormWeb.Areas.Admin.Controllers
 {
@@ -10,9 +11,11 @@ namespace BookWormWeb.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -52,10 +55,42 @@ namespace BookWormWeb.Areas.Admin.Controllers
         public IActionResult Upsert(ProductVM productVM, IFormFile? file)
         {
             if (ModelState.IsValid)
-            {
-                _unitOfWork.ProductRepo.Add(productVM.Product);
-                _unitOfWork.Save();
-                TempData["success"] = "Product created successfully";
+            { 
+                string webRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(webRootPath, @"images\product");
+                    if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
+                    {
+                        var oldImagePath = Path.Combine(webRootPath, productVM.Product.ImageUrl.Trim('\\'));
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+                    string fullPath = Path.Combine(productPath, filename);
+                    using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    productVM.Product.ImageUrl = @"\images\product\" + filename;
+
+                }
+                if (productVM.Product.Id == 0)
+                {
+                    _unitOfWork.ProductRepo.Add(productVM.Product);
+                    _unitOfWork.Save();
+                    TempData["success"] = "Product created successfully";
+                }
+                else
+                {
+                    _unitOfWork.ProductRepo.Update(productVM.Product);
+
+                    _unitOfWork.Save();
+                    TempData["success"] = "Product updated successfully";
+                }
+                
                 return RedirectToAction("Index");
             }
             else
