@@ -38,7 +38,7 @@ namespace Book.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
 
                     b.HasData(
                         new
@@ -88,7 +88,7 @@ namespace Book.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CoverTypes");
+                    b.ToTable("CoverTypes", (string)null);
                 });
 
             modelBuilder.Entity("Book.Models.Product", b =>
@@ -138,7 +138,7 @@ namespace Book.DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
 
                     b.HasData(
                         new

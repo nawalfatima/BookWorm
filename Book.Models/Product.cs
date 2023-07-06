@@ -37,7 +37,7 @@ namespace Book.Models
 
         public double Price100 { get; set; }
         [ValidateNever]
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
