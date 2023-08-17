@@ -12,7 +12,24 @@
                                 <p class="card-title h6 text-dark opacity-75 text-uppercase text-center">@product.Title</p>
                                 <p class="card-title text-warning text-center"> @product.Author </p>
                             </div>
+                            <div class="pl-1">
+                                <p class="h6 text-dark opacity-75 text-center mb-0">
+                                    List Price:
+                                    <span class="text-decoration-line-through">@product.ListPrice.ToString("c")</span>
+                                </p>
+                                <p class="h6 text-dark opacity-75 text-center">
+                                    As low as:
+                                    <span>@product.Price100.ToString("c")</span>
+                                </p>
+                            </div>
 
+                        </div>
+                        <div>
+                            <a asp-action="Details"
+                            asp-route-id ="@product.Id"
+                            class="btn btn-primary bg-gradient boder-0 form-control">
+                                Details
+                            </a>
                         </div>
                     </div>
                 </div>
